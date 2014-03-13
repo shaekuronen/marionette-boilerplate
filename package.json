@@ -1,0 +1,32 @@
+{
+  "name": "Marionette-Boilerplate",
+  "title": "Marionette Boilerplate",
+  "description": "Marionette Boilerplate",
+  "version": "0.0.1",
+  "homepage": "https://github.com/shaekuronen/marionette-boilerplate",
+  "author": {
+    "name": "Shae Kuronen",
+    "email": "shae.kuronen@gmail.com",
+    "url": "http://www.shaekuronen.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:shaekuronen/marionette-boilerplate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shaekuronen/marionette-boilerplate/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": ""
+    }
+  ],
+  "keywords": [
+    "Backbone.js",
+    "Marionette Boilerplate"
+  ],
+  "devDependencies": {
+    "grunt": "~0.4.1"
+  }
+}
