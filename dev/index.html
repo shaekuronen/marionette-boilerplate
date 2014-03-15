@@ -38,12 +38,18 @@
       <p>Here is static content in the web page. You'll notice that it gets replaced by our app as soon as we start it.</p>
     </div>
 
+    <div id="grid-container"></div>
+
     <script id="static-view" type="text/template">
       <p>This was rendered by the Marionette DemoApp</p>
     </script>
 
     <script id="list-item-view" type="text/template">
       <li>One Item</li>
+    </script>
+
+    <script id="grid-item" type="text/template">
+      <img src="<%= thumbnail %>">
     </script>
 
     <script src="/bower_components/jquery/dist/jquery.js"></script>
