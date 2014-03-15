@@ -1,0 +1,52 @@
+{
+  "item1": {
+    "id": 1,
+    "name": "Item1 Name",
+    "thumbnail": "/img/items/item1_thumbnail.jpg"
+  },
+  "item2": {
+    "id": 2,
+    "name": "Item2 Name",
+    "thumbnail": "/img/items/item2_thumbnail.jpg"
+  },
+  "item3": {
+    "id": 3,
+    "name": "Item3 Name",
+    "thumbnail": "/img/items/item3_thumbnail.jpg"
+  },
+  "item4": {
+    "id": 4,
+    "name": "Item4 Name",
+    "thumbnail": "/img/items/item4_thumbnail.jpg"
+  },
+  "item5": {
+    "id": 5,
+    "name": "Item5 Name",
+    "thumbnail": "/img/items/item5_thumbnail.jpg"
+  },
+  "item6": {
+    "id": 6,
+    "name": "Item6 Name",
+    "thumbnail": "/img/items/item6_thumbnail.jpg"
+  },
+  "item7": {
+    "id": 7,
+    "name": "Item7 Name",
+    "thumbnail": "/img/items/item7_thumbnail.jpg"
+  },
+  "item8": {
+    "id": 8,
+    "name": "Item8 Name",
+    "thumbnail": "/img/items/item8_thumbnail.jpg"
+  },
+  "item9": {
+    "id": 9,
+    "name": "Item9 Name",
+    "thumbnail": "/img/items/item9_thumbnail.jpg"
+  },
+  "item10": {
+    "id": 10,
+    "name": "Item10 Name",
+    "thumbnail": "/img/items/item10_thumbnail.jpg"
+  }
+}
