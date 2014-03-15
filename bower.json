@@ -7,5 +7,5 @@
     "bootstrap": "~3.1.1"
   },
   "devDependencies": {},
-  "directory": "bower_components"
+  "directory": "dev/bower_components"
 }
