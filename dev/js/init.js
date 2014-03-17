@@ -6,6 +6,7 @@ DemoApp = (function(Backbone, Marionette) {
 
   App.addRegions({
     mainRegion: "#main",
+    sorterRegion: '#grid-sorter-region',
     gridRegion: '#grid-container'
   });
 
@@ -17,6 +18,15 @@ DemoApp = (function(Backbone, Marionette) {
     template: '#list-item-view',
     tagName: 'ul'
   });
+
+  App.unique_categories = new Backbone.Collection([
+    {
+      "name": "test name",
+      "categories": [
+        "cat1", "cat2", "cat3", "cat4", "cat5", "cat6"
+      ]
+    }
+  ]);
 
   // items collection
   App.items = new Backbone.Collection([
@@ -115,13 +125,43 @@ DemoApp = (function(Backbone, Marionette) {
   ]);
   // end items collection
 
-  // grid sorter module
+  // GRID SORTER MODULE
+
+  // sorter item view
+  App.SorterItemView = Marionette.ItemView.extend({
+    tagName: 'select',
+    template: '#sorter-item-template'
+  });
+  // end sorter item view
+
+  // sorter item model
+  App.SorterItemModel = Backbone.Model.extend({
+
+  });
+  // end sorter item model
+
+  // sorter collection
+  App.SorterCollection = Backbone.Collection.extend({
+    model: App.SorterItemModel
+  });
+  // end sorter collection
+
+  // sorter collection view
+  App.SorterCollectionView = Marionette.CollectionView.extend({
+    tagName: 'span',
+    itemView: App.SorterItemView
+  });
+  // end sorter collection view 
+
+  // module definition
   App.module("GridSorter", function(GridSorter, App, Backbone, Marionette, $, _) {
 
 
 
   });
-  // end grid sorter module
+  // end module definition
+
+  // END GRID SORTER MODULE
 
   // GRID MODULE
 
@@ -133,14 +173,14 @@ DemoApp = (function(Backbone, Marionette) {
   // end grid item view
 
   // grid item model
-  App.GridItemModel = Backbone.Model.extend({
+  App.ItemModel = Backbone.Model.extend({
 
   });
   // end grid item model
 
   // grid collection
   App.GridCollection = Backbone.Collection.extend({
-    model: App.GridItemModel
+    model: App.ItemModel
   });
   // end grid collection
 
@@ -166,6 +206,14 @@ DemoApp = (function(Backbone, Marionette) {
     var listItemView = new App.ListItemView;
 
     App.mainRegion.show(listItemView);
+
+    // create an instance of SorterView
+    var sorterCollectionView = new App.SorterCollectionView({
+      collection: App.unique_categories
+    });
+
+    // render sorter
+    App.sorterRegion.show(sorterCollectionView);
 
     // create an instance of GridCollectionView
     var gridCollectionView = new App.GridCollectionView({

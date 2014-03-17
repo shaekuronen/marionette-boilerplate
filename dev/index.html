@@ -38,8 +38,11 @@
       <p>Here is static content in the web page. You'll notice that it gets replaced by our app as soon as we start it.</p>
     </div>
 
+    <div id="grid-sorter-region"></div>
+
     <div id="grid-container"></div>
 
+    <!-- templates -->
     <script id="static-view" type="text/template">
       <p>This was rendered by the Marionette DemoApp</p>
     </script>
@@ -51,6 +54,20 @@
     <script id="grid-item" type="text/template">
       <img src="<%= thumbnail %>">
     </script>
+
+    <script id="sorter-templateBAK" type="text/template">
+      <p>Sorter</p>
+      <select></select>
+    </script>
+
+    <script id="sorter-item-template" type="text/template">
+
+      <% _.each(categories, function(category, index) { %>
+      <option value="<%= category %>"><%= category %></option>
+      <% }); %>
+
+    </script>
+    <!-- end templates -->
 
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/underscore/underscore.js"></script>
