@@ -5,18 +5,8 @@ DemoApp = (function(Backbone, Marionette) {
   var App = new Marionette.Application();
 
   App.addRegions({
-    mainRegion: "#main",
     sorterRegion: '#grid-sorter-region',
-    gridRegion: '#grid-container'
-  });
-
-  App.StaticView = Marionette.ItemView.extend({
-    template: '#static-view',
-  });
-
-  App.ListItemView = Marionette.ItemView.extend({
-    template: '#list-item-view',
-    tagName: 'ul'
+    gridRegion: '#grid-region'
   });
 
   // items collection
@@ -174,10 +164,6 @@ DemoApp = (function(Backbone, Marionette) {
   // END GRID MODULE
 
   App.on("initialize:after", function() {
-
-    var listItemView = new App.ListItemView;
-
-    App.mainRegion.show(listItemView);
 
     // create an instance of SorterView
     var sorterView = new App.SorterItemView({
