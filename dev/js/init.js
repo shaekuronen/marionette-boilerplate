@@ -108,11 +108,38 @@ DemoApp = (function(Backbone, Marionette) {
 
   // GRID SORTER MODULE
 
-  // sorter item view
   App.SorterItemView = Marionette.ItemView.extend({
     tagName: 'select',
-    template: '#sorter-item-template'
+    template: '#sorter-item-template',
+    initialize: function() {
+
+      // create an array of unique categories in the collection
+      var _categories = [];
+
+      _.each(App.items.models, function(model) {
+
+        _.each(model.attributes.categories, function(category) {
+
+          _categories.push(category);
+
+        });
+
+      });
+
+      var uniqueCategories = _.uniq(_categories);
+      // end create an array of unique categories in the collection
+
+      // create an object
+      var categoriesObject = {
+        "categories": uniqueCategories
+      }
+
+      this.model = new Backbone.Model(categoriesObject);
+
+    }
+
   });
+
   // end sorter item view
 
   // module definition
@@ -165,14 +192,7 @@ DemoApp = (function(Backbone, Marionette) {
 
   App.on("initialize:after", function() {
 
-    // create an instance of SorterView
-    var sorterView = new App.SorterItemView({
-      model: new Backbone.Model({
-        "categories": [
-          "cat1", "cat2", "cat3", "cat4", "cat5", "cat6"
-        ]
-      })
-    });
+    var sorterView = new App.SorterItemView();
 
     // render sorter
     App.sorterRegion.show(sorterView);
