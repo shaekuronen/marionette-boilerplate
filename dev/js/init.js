@@ -113,7 +113,7 @@ DemoApp = (function(Backbone, Marionette) {
     template: '#sorter-item-template',
     initialize: function() {
 
-      // create an array of unique categories in the collection
+      // create an array of all categories in the collection
       var _categories = [];
 
       _.each(App.items.models, function(model) {
@@ -125,16 +125,12 @@ DemoApp = (function(Backbone, Marionette) {
         });
 
       });
+      // end create an array of all categories in the collection
 
-      var uniqueCategories = _.uniq(_categories);
-      // end create an array of unique categories in the collection
-
-      // create an object
-      var categoriesObject = {
-        "categories": uniqueCategories
-      }
-
-      this.model = new Backbone.Model(categoriesObject);
+      this.model = new Backbone.Model({
+        // initialize the model with an array of the unique categories in the collection
+        "categories": _.uniq(_categories)
+      });
 
     }
 
