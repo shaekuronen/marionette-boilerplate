@@ -9,6 +9,10 @@ DemoApp = (function(Backbone, Marionette) {
     gridRegion: '#grid-region'
   });
 
+  // add an event manager
+  App.vent = new Backbone.Wreqr.EventAggregator();
+  App.reqres = new Backbone.Wreqr.RequestResponse();
+
   // items collection
   App.items = new Backbone.Collection([
     {
@@ -108,15 +112,76 @@ DemoApp = (function(Backbone, Marionette) {
 
   // GRID SORTER MODULE
 
-  App.SorterItemView = Marionette.ItemView.extend({
+  // grid sorter view
+  App.GridSorterItemView = Marionette.ItemView.extend({
     tagName: 'select',
+    id: 'grid-sorter',
     template: '#sorter-item-template',
+    collection: App.items,
     initialize: function() {
 
-      // create an array of all categories in the collection
-      var _categories = [];
+      this.model = App.reqres.request('request:unique:model:categories', this.collection);
 
-      _.each(App.items.models, function(model) {
+      // console.log('this_model is ' + Object.keys(this_model.attributes.categories));
+
+      // // create an array of all categories in the collection
+      // var _categories = [],
+      //     model;
+
+      // _.each(this.collection.models, function(model) {
+
+      //   _.each(model.attributes.categories, function(category) {
+
+      //     _categories.push(category);
+
+      //   });
+
+      // });
+      // // end create an array of all categories in the collection
+
+      // this.model = new Backbone.Model({
+      //   // initialize the model with an array of the unique categories in the collection
+      //   'categories': _.uniq(_categories)
+      // });
+
+    }
+    // ,
+
+
+    // initialize: function() {
+    //   console.log('App.GridSorterItemView initialize happened');
+    //   console.log('App.GridSorterItemView collection is ' + Object.keys(this.collection.models));
+
+    //   this.model = App.vent.trigger('request:unique:model', this.collection, 'categories');
+
+    //   console.log('App.GridSorterItemView initialize this.model definition happened ' + this.model);
+
+    // }
+
+  });
+  // end grid sorter view
+
+  // grid sorter controller
+  App.GridSorterController = Marionette.Controller.extend({
+
+    initialize: function() {
+
+      App.reqres.setHandler("request:unique:model:categories", this.get_unique_model);
+
+    },
+
+    get_unique_model: function(collection) {
+
+      console.log('get_unique_model() happened and collection is ' + Object.keys(collection.models));
+
+      // create an array of all categories in the collection
+      var _collection = collection,
+          _categories = [],
+          model;
+
+      _.each(_collection.models, function(model) {
+
+        console.log('the model is now ' + Object.keys(model.attributes));
 
         _.each(model.attributes.categories, function(category) {
 
@@ -127,16 +192,19 @@ DemoApp = (function(Backbone, Marionette) {
       });
       // end create an array of all categories in the collection
 
-      this.model = new Backbone.Model({
+      model = new Backbone.Model({
         // initialize the model with an array of the unique categories in the collection
-        "categories": _.uniq(_categories)
+        'categories': _.uniq(_categories)
       });
+
+      console.log('after GridSorterController model is ' + Object.keys(model.attributes.categories));
+
+      return model;
 
     }
 
   });
-
-  // end sorter item view
+  // end grid sorter controller
 
   // module definition
   App.module("GridSorter", function(GridSorter, App, Backbone, Marionette, $, _) {
@@ -188,10 +256,12 @@ DemoApp = (function(Backbone, Marionette) {
 
   App.on("initialize:after", function() {
 
-    var sorterView = new App.SorterItemView();
+    var gridSorterController = new App.GridSorterController();
+
+    var gridSorterView = new App.GridSorterItemView();
 
     // render sorter
-    App.sorterRegion.show(sorterView);
+    App.sorterRegion.show(gridSorterView);
 
     // create an instance of GridCollectionView
     var gridCollectionView = new App.GridCollectionView({
@@ -202,8 +272,6 @@ DemoApp = (function(Backbone, Marionette) {
     App.gridRegion.show(gridCollectionView);
 
   });
-
-  // App.main.show(new App.StaticView);
 
   App.start();
 
