@@ -4,6 +4,16 @@ DemoApp = (function(Backbone, Marionette) {
 
   var App = new Marionette.Application();
 
+  App.print_object = function(obj) {
+
+    var output = '';
+    for(var property in obj) {
+      output += property + ': ' + obj[property]+'; \n';
+    }
+    console.log(output);
+
+  }
+
   App.addRegions({
     sorterRegion: '#grid-sorter-region',
     gridRegion: '#grid-region'
@@ -114,76 +124,27 @@ DemoApp = (function(Backbone, Marionette) {
 
   // grid sorter view
   App.GridSorterItemView = Marionette.ItemView.extend({
+
     tagName: 'select',
     id: 'grid-sorter',
-    template: '#sorter-item-template',
-    collection: App.items,
-    initialize: function() {
-
-      this.model = App.reqres.request('request:unique:model:categories', this.collection);
-
-      // console.log('this_model is ' + Object.keys(this_model.attributes.categories));
-
-      // // create an array of all categories in the collection
-      // var _categories = [],
-      //     model;
-
-      // _.each(this.collection.models, function(model) {
-
-      //   _.each(model.attributes.categories, function(category) {
-
-      //     _categories.push(category);
-
-      //   });
-
-      // });
-      // // end create an array of all categories in the collection
-
-      // this.model = new Backbone.Model({
-      //   // initialize the model with an array of the unique categories in the collection
-      //   'categories': _.uniq(_categories)
-      // });
-
-    }
-    // ,
-
-
-    // initialize: function() {
-    //   console.log('App.GridSorterItemView initialize happened');
-    //   console.log('App.GridSorterItemView collection is ' + Object.keys(this.collection.models));
-
-    //   this.model = App.vent.trigger('request:unique:model', this.collection, 'categories');
-
-    //   console.log('App.GridSorterItemView initialize this.model definition happened ' + this.model);
-
-    // }
+    template: '#sorter-item-template'
 
   });
   // end grid sorter view
 
-  // grid sorter controller
-  App.GridSorterController = Marionette.Controller.extend({
+  // unique categories model
+  App.UniqueCategoriesModel = Backbone.Model.extend({
+
+    collection: App.items,
 
     initialize: function() {
 
-      App.reqres.setHandler("request:unique:model:categories", this.get_unique_model);
-
-    },
-
-    get_unique_model: function(collection) {
-
-      console.log('get_unique_model() happened and collection is ' + Object.keys(collection.models));
-
       // create an array of all categories in the collection
-      var _collection = collection,
-          _categories = [],
-          model;
+      var _categories = [];
 
-      _.each(_collection.models, function(model) {
+      _.each(this.collection.models, function(model) {
 
-        console.log('the model is now ' + Object.keys(model.attributes));
-
-        _.each(model.attributes.categories, function(category) {
+        _.each(model.get('categories'), function(category) {
 
           _categories.push(category);
 
@@ -192,18 +153,56 @@ DemoApp = (function(Backbone, Marionette) {
       });
       // end create an array of all categories in the collection
 
-      model = new Backbone.Model({
-        // initialize the model with an array of the unique categories in the collection
-        'categories': _.uniq(_categories)
-      });
-
-      console.log('after GridSorterController model is ' + Object.keys(model.attributes.categories));
-
-      return model;
+      this.set({'categories': _.uniq(_categories)});
 
     }
 
   });
+  // end unique categories model
+
+  // grid sorter controller
+  // App.GridSorterController = Marionette.Controller.extend({
+
+    // initialize: function() {
+
+    //   App.reqres.setHandler("request:unique:model:categories", this.get_unique_model);
+
+    // },
+
+    // get_unique_model: function(collection) {
+
+    //   console.log('get_unique_model() happened and collection is ' + Object.keys(collection.models));
+
+    //   // create an array of all categories in the collection
+    //   var _collection = collection,
+    //       _categories = [],
+    //       model;
+
+    //   _.each(_collection.models, function(model) {
+
+    //     console.log('the model is now ' + Object.keys(model.attributes));
+
+    //     _.each(model.attributes.categories, function(category) {
+
+    //       _categories.push(category);
+
+    //     });
+
+    //   });
+    //   // end create an array of all categories in the collection
+
+    //   model = new Backbone.Model({
+    //     // initialize the model with an array of the unique categories in the collection
+    //     'categories': _.uniq(_categories)
+    //   });
+
+    //   console.log('after GridSorterController model is ' + Object.keys(model.attributes.categories));
+
+    //   return model;
+
+    // }
+
+  // });
   // end grid sorter controller
 
   // module definition
@@ -255,10 +254,11 @@ DemoApp = (function(Backbone, Marionette) {
   // END GRID MODULE
 
   App.on("initialize:after", function() {
+    var uniqueCategoriesModel = new App.UniqueCategoriesModel();
 
-    var gridSorterController = new App.GridSorterController();
-
-    var gridSorterView = new App.GridSorterItemView();
+    var gridSorterView = new App.GridSorterItemView({
+      model: uniqueCategoriesModel
+    });
 
     // render sorter
     App.sorterRegion.show(gridSorterView);
