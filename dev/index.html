@@ -38,6 +38,12 @@
 
     <div id="grid-region"></div>
 
+    <select name="test-select" id="test-select">
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </select>
+
     <!-- templates -->
 
     <script id="grid-item" type="text/template">
@@ -61,6 +67,12 @@
     <script src="/bower_components/backbone.wreqr/lib/backbone.wreqr.js"></script>
     <script src="/bower_components/backbone.babysitter/lib/backbone.babysitter.js"></script>
     <script src="/js/init.js"></script>
+
+    <script>
+    $('#test-select').on('change', function() {
+      console.log('input was selected');
+    });
+    </script>
 
   </body>
 </html>
