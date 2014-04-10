@@ -250,6 +250,28 @@ DemoApp = (function(Backbone, Marionette) {
   // grid controller
   App.GridController = Marionette.Controller.extend({
 
+    initialize: function() {
+
+      // create an instance of GridCollectionView
+      var gridCollectionView = new App.GridCollectionView({
+        collection: App.items
+      });
+
+      // render grid
+      App.gridRegion.show(gridCollectionView);
+
+      App.vent.on('gridSorter:category:selected', function(category) {
+        console.log('App.GridController received event gridSorter:category:selected');
+        console.log('and the category is ' + category);
+      });
+
+    },
+
+    // get models with a specific category
+    getSelectedCategoryModels: function() {
+
+    }
+
   });
   // end grid controller
 
@@ -274,13 +296,15 @@ DemoApp = (function(Backbone, Marionette) {
     // render sorter
     App.sorterRegion.show(gridSorterView);
 
-    // create an instance of GridCollectionView
-    var gridCollectionView = new App.GridCollectionView({
-      collection: App.items
-    });
+    // // create an instance of GridCollectionView
+    // var gridCollectionView = new App.GridCollectionView({
+    //   collection: App.items
+    // });
 
-    // render grid
-    App.gridRegion.show(gridCollectionView);
+    // // render grid
+    // App.gridRegion.show(gridCollectionView);
+
+    var gridController = new App.GridController();
 
   });
 
