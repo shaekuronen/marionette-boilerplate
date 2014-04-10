@@ -136,20 +136,33 @@ DemoApp = (function(Backbone, Marionette) {
 
       var _this = this;
 
+      // per this discussion + research looks like have to go into the dom to get select > option:selected event
+      // http://stackoverflow.com/questions/16350211/backbone-js-html-select-radio-change-event-is-not-firing-but-click-event-is
       $('document').ready(function() {
-        $('#grid-sorter').on('change', $.proxy(_this.onselect, _this));
+
+        // when the grid-sorter select element is updated
+        $('#grid-sorter').on('change', function() {
+
+          // get the selected category
+          var selectedCategory = $(this).find('option:selected').attr('value');
+
+          // update the model
+          _this.model.set({
+            'selected': selectedCategory
+          });
+
+        });
+
       });
 
+      // when this model's 'selected' attribute is changed
+      this.model.on('change:selected', this.onCategorySelected, this);
+
     },
 
-    onselect: function (evt) {
-      console.log('change is ' + Object.keys(evt));
-    },
-
-    // notify app that a grid sorter category has been selected
-    // App.vent('gridSorter:option:selected')
-    events: {
-
+    onCategorySelected: function() {
+      var category = this.model.get('selected');
+      App.vent.trigger('gridSorter:category:selected', category);
     }
 
   });
@@ -234,6 +247,12 @@ DemoApp = (function(Backbone, Marionette) {
   });
   // end grid collection view
 
+  // grid controller
+  App.GridController = Marionette.Controller.extend({
+
+  });
+  // end grid controller
+
   // module definition
   App.module("Grid", function(Grid, App, Backbone, Marionette, $, _) {
 
@@ -245,6 +264,7 @@ DemoApp = (function(Backbone, Marionette) {
   // END GRID MODULE
 
   App.on("initialize:after", function() {
+
     var uniqueCategoriesModel = new App.UniqueCategoriesModel();
 
     var gridSorterView = new App.GridSorterItemView({
