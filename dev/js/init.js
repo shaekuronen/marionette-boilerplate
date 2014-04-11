@@ -150,31 +150,22 @@ DemoApp = (function(Backbone, Marionette) {
       // http://stackoverflow.com/questions/16350211/backbone-js-html-select-radio-change-event-is-not-firing-but-click-event-is
       $('document').ready(function() {
 
+        // kind of a hack until figure out how to detect currently selected option on page load
         App.vent.trigger('gridSorter:category:selected', 'all');
 
-        // when the grid-sorter select element is updated
+        // when the grid-sorter select element option is selected
         $('#grid-sorter').on('change', function() {
 
           // get the selected category
           var selectedCategory = $(this).find('option:selected').attr('value');
 
-          // update the model
-          _this.model.set({
-            'selected': selectedCategory
-          });
+          // notify controller that select element option was selected
+          App.vent.trigger('gridSorter:category:selected', selectedCategory);
 
         });
 
       });
 
-      // when this model's 'selected' attribute is changed
-      this.model.on('change:selected', this.onCategorySelected, this);
-
-    },
-
-    onCategorySelected: function() {
-      var category = this.model.get('selected');
-      App.vent.trigger('gridSorter:category:selected', category);
     }
 
   });
@@ -247,9 +238,67 @@ DemoApp = (function(Backbone, Marionette) {
 
   // grid collection
   App.GridCollection = Backbone.Collection.extend({
+
     model: App.ItemModel
+
+    // ,
+
+    // filterGridCollection: function(category) {
+
+    //   var filteredCollection = [];
+
+    //   _.each(this.models, function(model) {
+
+    //     var _categories = model.get('categories');
+
+    //     // if this model's attribute 'categories' contains the value for category
+    //     if ( _.contains(_categories, category) ) {
+
+    //       // push the model into the new collection
+    //       filteredCollection.push(model);
+    //     }
+
+    //   });
+
+    //   return filteredCollection;
+
+    // }
+
   });
   // end grid collection
+
+  // filtered grid collection
+  App.FilteredGridCollection = Backbone.Collection.extend({
+
+    model: App.ItemModel,
+
+    initialize: function(collection, options) {
+
+      var _this = this;
+
+      _.each(collection.models, function(model) {
+
+        var _categories = model.get('categories');
+
+        // if this model's attribute 'categories' contains the value for category
+        if ( _.contains(_categories, options.category) ) {
+
+          console.log('this model is ' + model);
+
+          // add the model to the collection
+          _this.add(model);
+
+        }
+
+      });
+
+      console.log('_this is ' + Object.keys(_this));
+      console.log('_this.length is ' + _this.length);
+
+    }
+
+  });
+  // end filtered grid collection
 
   // grid collection view
   App.GridCollectionView = Marionette.CollectionView.extend({
@@ -262,6 +311,10 @@ DemoApp = (function(Backbone, Marionette) {
   App.GridController = Marionette.Controller.extend({
 
     initialize: function() {
+
+
+
+
 
       var _this = this;
 
@@ -277,38 +330,44 @@ DemoApp = (function(Backbone, Marionette) {
 
       App.vent.on('gridSorter:category:selected', function(category) {
 
-        // create a new collection by filtering the original collection
-        var selectedCollection = _this.getSelectedCategoryModels(App.items, category);
+        var filteredCollection = new App.FilteredGridCollection(App.items, {'category': category});
 
-        gridCollection.reset(selectedCollection);
+        gridCollection.reset(filteredCollection);
 
-      });
+        // // create a new collection by filtering the original collection
+        // var selectedCollection = _this.getSelectedCategoryModels(App.items, category);
 
-    },
-
-    // get a collection of models with a specific category
-    getSelectedCategoryModels: function(collection, category) {
-
-      var selectedCategoryModelsCollection = [];
-
-      _.each(collection.models, function(model) {
-
-        var _categories = model.get('categories');
-
-        // if this model's attribute 'categories' contains the value for category
-        if ( _.contains(_categories, category) ) {
-
-          // push the model into the new collection
-          selectedCategoryModelsCollection.push(model);
-        }
+        // gridCollection.reset(selectedCollection);
 
       });
-
-      console.log('selectedCategoryModelsCollection is ' + selectedCategoryModelsCollection);
-
-      return selectedCategoryModelsCollection;
 
     }
+
+    // ,
+
+    // // get a collection of models with a specific category
+    // getSelectedCategoryModels: function(collection, category) {
+
+    //   var selectedCategoryModelsCollection = [];
+
+    //   _.each(collection.models, function(model) {
+
+    //     var _categories = model.get('categories');
+
+    //     // if this model's attribute 'categories' contains the value for category
+    //     if ( _.contains(_categories, category) ) {
+
+    //       // push the model into the new collection
+    //       selectedCategoryModelsCollection.push(model);
+    //     }
+
+    //   });
+
+    //   console.log('selectedCategoryModelsCollection is ' + selectedCategoryModelsCollection);
+
+    //   return selectedCategoryModelsCollection;
+
+    // }
 
   });
   // end grid controller
