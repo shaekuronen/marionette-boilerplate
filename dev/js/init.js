@@ -30,6 +30,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item1 Name",
       "thumbnail": "/img/items/item01_thumbnail.jpg",
       "categories": [
+        "all",
         "cat1",
         "cat2",
         "cat3"
@@ -40,6 +41,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item2 Name",
       "thumbnail": "/img/items/item02_thumbnail.jpg",
       "categories": [
+        "all",
         "cat4",
         "cat5",
         "cat6"
@@ -50,6 +52,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item3 Name",
       "thumbnail": "/img/items/item03_thumbnail.jpg",
       "categories": [
+        "all",
         "cat1",
         "cat3"
       ]
@@ -59,6 +62,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item4 Name",
       "thumbnail": "/img/items/item04_thumbnail.jpg",
       "categories": [
+        "all",
         "cat2",
         "cat4"
       ]
@@ -68,6 +72,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item5 Name",
       "thumbnail": "/img/items/item05_thumbnail.jpg",
       "categories": [
+        "all",
         "cat5",
         "cat6"
       ]
@@ -77,6 +82,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item6 Name",
       "thumbnail": "/img/items/item06_thumbnail.jpg",
       "categories": [
+        "all",
         "cat1",
         "cat6"
       ]
@@ -86,6 +92,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item7 Name",
       "thumbnail": "/img/items/item07_thumbnail.jpg",
       "categories": [
+        "all",
         "cat2",
         "cat4"
       ]
@@ -95,6 +102,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item8 Name",
       "thumbnail": "/img/items/item08_thumbnail.jpg",
       "categories": [
+        "all",
         "cat3",
         "cat5"
       ]
@@ -104,6 +112,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item9 Name",
       "thumbnail": "/img/items/item09_thumbnail.jpg",
       "categories": [
+        "all",
         "cat4",
         "cat6"
       ]
@@ -113,6 +122,7 @@ DemoApp = (function(Backbone, Marionette) {
       "name": "Item10 Name",
       "thumbnail": "/img/items/item10_thumbnail.jpg",
       "categories": [
+        "all",
         "cat1",
         "cat4"
       ]
@@ -139,6 +149,8 @@ DemoApp = (function(Backbone, Marionette) {
       // per this discussion + research looks like have to go into the dom to get select > option:selected event
       // http://stackoverflow.com/questions/16350211/backbone-js-html-select-radio-change-event-is-not-firing-but-click-event-is
       $('document').ready(function() {
+
+        App.vent.trigger('gridSorter:category:selected', 'all');
 
         // when the grid-sorter select element is updated
         $('#grid-sorter').on('change', function() {
@@ -175,7 +187,6 @@ DemoApp = (function(Backbone, Marionette) {
 
     initialize: function() {
 
-      // create an array of all categories in the collection
       var _categories = [];
 
       _.each(this.collection.models, function(model) {
@@ -252,23 +263,50 @@ DemoApp = (function(Backbone, Marionette) {
 
     initialize: function() {
 
+      var _this = this;
+
+      var gridCollection = new App.GridCollection();
+
       // create an instance of GridCollectionView
       var gridCollectionView = new App.GridCollectionView({
-        collection: App.items
+        collection: gridCollection
       });
 
       // render grid
       App.gridRegion.show(gridCollectionView);
 
       App.vent.on('gridSorter:category:selected', function(category) {
-        console.log('App.GridController received event gridSorter:category:selected');
-        console.log('and the category is ' + category);
+
+        // create a new collection by filtering the original collection
+        var selectedCollection = _this.getSelectedCategoryModels(App.items, category);
+
+        gridCollection.reset(selectedCollection);
+
       });
 
     },
 
-    // get models with a specific category
-    getSelectedCategoryModels: function() {
+    // get a collection of models with a specific category
+    getSelectedCategoryModels: function(collection, category) {
+
+      var selectedCategoryModelsCollection = [];
+
+      _.each(collection.models, function(model) {
+
+        var _categories = model.get('categories');
+
+        // if this model's attribute 'categories' contains the value for category
+        if ( _.contains(_categories, category) ) {
+
+          // push the model into the new collection
+          selectedCategoryModelsCollection.push(model);
+        }
+
+      });
+
+      console.log('selectedCategoryModelsCollection is ' + selectedCategoryModelsCollection);
+
+      return selectedCategoryModelsCollection;
 
     }
 
