@@ -290,26 +290,6 @@ DemoApp = (function(Backbone, Marionette) {
 
       App.vent.on('gridSorter:category:selected', function(category) {
 
-
-        // WORKS
-        // var filteredCollection = new Backbone.Collection();
-
-        // _.each(App.items.models, function(model) {
-
-        //   console.log('category is ' + category);
-
-        //   if ( _.contains(model.get('categories'), category) ) {
-        //     console.log('model contains category ' + category);
-        //     filteredCollection.add(model);
-        //   } else {
-        //     console.log('model does not contain category ' + category);
-        //   }
-
-        // });
-
-        // gridCollection.reset(filteredCollection.models);
-        // END WORKS
-
         var filteredCollection = gridCollection.filter(App.items, category);
 
         gridCollection.reset(filteredCollection);
