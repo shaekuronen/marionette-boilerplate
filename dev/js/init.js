@@ -239,66 +239,30 @@ DemoApp = (function(Backbone, Marionette) {
   // grid collection
   App.GridCollection = Backbone.Collection.extend({
 
-    model: App.ItemModel
-
-    // ,
-
-    // filterGridCollection: function(category) {
-
-    //   var filteredCollection = [];
-
-    //   _.each(this.models, function(model) {
-
-    //     var _categories = model.get('categories');
-
-    //     // if this model's attribute 'categories' contains the value for category
-    //     if ( _.contains(_categories, category) ) {
-
-    //       // push the model into the new collection
-    //       filteredCollection.push(model);
-    //     }
-
-    //   });
-
-    //   return filteredCollection;
-
-    // }
-
-  });
-  // end grid collection
-
-  // filtered grid collection
-  App.FilteredGridCollection = Backbone.Collection.extend({
-
     model: App.ItemModel,
 
-    initialize: function(collection, options) {
+    filter: function(collection, category) {
 
-      var _this = this;
+      var filteredCollection = [];
 
       _.each(collection.models, function(model) {
 
-        var _categories = model.get('categories');
+        if ( _.contains(model.get('categories'), category) ) {
 
-        // if this model's attribute 'categories' contains the value for category
-        if ( _.contains(_categories, options.category) ) {
+          console.log('this happened and category is ' + category);
 
-          console.log('this model is ' + model);
-
-          // add the model to the collection
-          _this.add(model);
+          filteredCollection.push(model);
 
         }
 
       });
 
-      console.log('_this is ' + Object.keys(_this));
-      console.log('_this.length is ' + _this.length);
+      return filteredCollection;
 
     }
 
   });
-  // end filtered grid collection
+  // end grid collection
 
   // grid collection view
   App.GridCollectionView = Marionette.CollectionView.extend({
@@ -311,10 +275,6 @@ DemoApp = (function(Backbone, Marionette) {
   App.GridController = Marionette.Controller.extend({
 
     initialize: function() {
-
-
-
-
 
       var _this = this;
 
@@ -330,44 +290,33 @@ DemoApp = (function(Backbone, Marionette) {
 
       App.vent.on('gridSorter:category:selected', function(category) {
 
-        var filteredCollection = new App.FilteredGridCollection(App.items, {'category': category});
+
+        // WORKS
+        // var filteredCollection = new Backbone.Collection();
+
+        // _.each(App.items.models, function(model) {
+
+        //   console.log('category is ' + category);
+
+        //   if ( _.contains(model.get('categories'), category) ) {
+        //     console.log('model contains category ' + category);
+        //     filteredCollection.add(model);
+        //   } else {
+        //     console.log('model does not contain category ' + category);
+        //   }
+
+        // });
+
+        // gridCollection.reset(filteredCollection.models);
+        // END WORKS
+
+        var filteredCollection = gridCollection.filter(App.items, category);
 
         gridCollection.reset(filteredCollection);
-
-        // // create a new collection by filtering the original collection
-        // var selectedCollection = _this.getSelectedCategoryModels(App.items, category);
-
-        // gridCollection.reset(selectedCollection);
 
       });
 
     }
-
-    // ,
-
-    // // get a collection of models with a specific category
-    // getSelectedCategoryModels: function(collection, category) {
-
-    //   var selectedCategoryModelsCollection = [];
-
-    //   _.each(collection.models, function(model) {
-
-    //     var _categories = model.get('categories');
-
-    //     // if this model's attribute 'categories' contains the value for category
-    //     if ( _.contains(_categories, category) ) {
-
-    //       // push the model into the new collection
-    //       selectedCategoryModelsCollection.push(model);
-    //     }
-
-    //   });
-
-    //   console.log('selectedCategoryModelsCollection is ' + selectedCategoryModelsCollection);
-
-    //   return selectedCategoryModelsCollection;
-
-    // }
 
   });
   // end grid controller
@@ -392,14 +341,6 @@ DemoApp = (function(Backbone, Marionette) {
 
     // render sorter
     App.sorterRegion.show(gridSorterView);
-
-    // // create an instance of GridCollectionView
-    // var gridCollectionView = new App.GridCollectionView({
-    //   collection: App.items
-    // });
-
-    // // render grid
-    // App.gridRegion.show(gridCollectionView);
 
     var gridController = new App.GridController();
 
