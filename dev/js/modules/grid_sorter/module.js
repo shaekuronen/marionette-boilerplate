@@ -1,7 +1,7 @@
 
-App.module("gridSorter", function(gridSorter, App, Backbone, Marionette, $, _) {
+App.module("GridSorter", function(GridSorter, App, Backbone, Marionette, $, _) {
 
-  var gridCollection = new App.GridCollection(App.Data);
+  var gridCollection = new App.ItemsCollection(App.Data);
 
   // create unique categories instance
   var uniqueCategoriesObject = gridCollection.getUniqueCategories();
