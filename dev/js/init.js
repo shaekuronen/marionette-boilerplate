@@ -118,6 +118,101 @@ DemoApp = (function(Backbone, Marionette) {
       ]
     }
   ]);
+
+  App.itemsArray = [
+    {
+      "id": 1,
+      "name": "Item1 Name",
+      "thumbnail": "/img/items/item01_thumbnail.jpg",
+      "categories": [
+        "cat1",
+        "cat2",
+        "cat3"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Item2 Name",
+      "thumbnail": "/img/items/item02_thumbnail.jpg",
+      "categories": [
+        "cat4",
+        "cat5",
+        "cat6"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Item3 Name",
+      "thumbnail": "/img/items/item03_thumbnail.jpg",
+      "categories": [
+        "cat1",
+        "cat3"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Item4 Name",
+      "thumbnail": "/img/items/item04_thumbnail.jpg",
+      "categories": [
+        "cat2",
+        "cat4"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Item5 Name",
+      "thumbnail": "/img/items/item05_thumbnail.jpg",
+      "categories": [
+        "cat5",
+        "cat6"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Item6 Name",
+      "thumbnail": "/img/items/item06_thumbnail.jpg",
+      "categories": [
+        "cat1",
+        "cat6"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Item7 Name",
+      "thumbnail": "/img/items/item07_thumbnail.jpg",
+      "categories": [
+        "cat2",
+        "cat4"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Item8 Name",
+      "thumbnail": "/img/items/item08_thumbnail.jpg",
+      "categories": [
+        "cat3",
+        "cat5"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Item9 Name",
+      "thumbnail": "/img/items/item09_thumbnail.jpg",
+      "categories": [
+        "cat4",
+        "cat6"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Item10 Name",
+      "thumbnail": "/img/items/item10_thumbnail.jpg",
+      "categories": [
+        "cat1",
+        "cat4"
+      ]
+    }
+  ];
   // end items collection
 
   // GRID SORTER MODULE
@@ -146,9 +241,6 @@ DemoApp = (function(Backbone, Marionette) {
       // http://stackoverflow.com/questions/16350211/backbone-js-html-select-radio-change-event-is-not-firing-but-click-event-is
       $('document').ready(function() {
 
-        // kind of a hack until figure out how to detect currently selected option on page load
-        App.vent.trigger('gridSorter:category:selected', 'all');
-
         // when the grid-sorter select element option is selected
         $('#grid-sorter').on('change', function() {
 
@@ -160,41 +252,15 @@ DemoApp = (function(Backbone, Marionette) {
 
         });
 
+        // to be consistent, triggering this in the dom
+        $('#grid-sorter').find('option[value="all"]').prop('selected', true);
+
       });
 
     }
 
   });
   // end grid sorter view
-
-  // unique categories model
-  App.UniqueCategoriesModel = Backbone.Model.extend({
-
-    // collection: App.items,
-    // collection: App.GridCollection,
-
-    initialize: function(attributes, options) {
-
-      var _categories = [];
-
-      _.each(collection.models, function(model) {
-
-        _.each(model.get('categories'), function(category) {
-
-          _categories.push(category);
-
-        });
-
-      });
-      // end create an array of all categories in the collection
-
-      // add the unique categories to the model
-      this.set({'categories': _.uniq(_categories)});
-
-    }
-
-  });
-  // end unique categories model
 
   // grid sorter controller
   App.GridSorterController = Marionette.Controller.extend({
@@ -232,9 +298,11 @@ DemoApp = (function(Backbone, Marionette) {
 
     initialize: function(attributes, options) {
 
-      console.log('this is ' + Object.keys(this));
-      console.log('this is ' + Object.keys(this.attributes));
-      console.log('categories are' + this.get('categories'));
+      var _categories = this.get('categories');
+
+      _categories.push('all');
+
+      this.set('categories', _categories);
 
     }
 
@@ -244,7 +312,7 @@ DemoApp = (function(Backbone, Marionette) {
   // grid collection
   App.GridCollection = Backbone.Collection.extend({
 
-    model: new App.ItemModel,
+    model: App.ItemModel,
 
     filter: function(collection, category) {
 
@@ -253,8 +321,6 @@ DemoApp = (function(Backbone, Marionette) {
       _.each(collection.models, function(model) {
 
         if ( _.contains(model.get('categories'), category) ) {
-
-          console.log('this happened and category is ' + category);
 
           filteredCollection.push(model);
 
@@ -270,13 +336,9 @@ DemoApp = (function(Backbone, Marionette) {
 
       var _categories = [];
 
-      console.log('this is ' + Object.keys(this));
-      console.log('this.models is ' + Object.keys(this.models));
-
       _.each(collection.models, function(model) {
 
         _.each(model.get('categories'), function(category) {
-          console.log('the category is now ' + category);
 
           _categories.push(category);
 
@@ -287,12 +349,9 @@ DemoApp = (function(Backbone, Marionette) {
 
       var model = new Backbone.Model();
 
-      model.set({'categories': _.uniq(_categories)});
+      model.set({'categories': (_.uniq(_categories)).sort() });
 
       return model;
-
-      // add the unique categories to the model
-      // return new Backbone.Model({'categories': _.uniq(_categories)});
 
     }
 
@@ -309,23 +368,7 @@ DemoApp = (function(Backbone, Marionette) {
   // grid controller
   App.GridController = Marionette.Controller.extend({
 
-    initialize: function() {
 
-      var _this = this;
-
-      var gridCollection = new App.GridCollection();
-
-
-
-      App.vent.on('gridSorter:category:selected', function(category) {
-
-        var filteredCollection = gridCollection.filter(App.items, category);
-
-        gridCollection.reset(filteredCollection);
-
-      });
-
-    }
 
   });
   // end grid controller
@@ -342,26 +385,12 @@ DemoApp = (function(Backbone, Marionette) {
 
   App.on("initialize:after", function() {
 
-    // var gridCollection = new App.GridCollection({
-    //   model: App.ItemModel
-    // });
-
-    var gridCollection = new App.GridCollection(App.items.models);
-
-    console.log('the categories: ' + gridCollection.model[0].get('categories'));
+    var gridCollection = new App.GridCollection(App.itemsArray);
 
     // SORTER
 
     // create unique categories instance
-    // var uniqueCategoriesModel = gridCollection.getUniqueCategories(gridCollection);
-
-    var uniqueCategoriesModel = new Backbone.Model({
-      'categories': [
-        'cat1',
-        'cat2',
-        'cat3'
-      ]
-    });
+    var uniqueCategoriesModel = gridCollection.getUniqueCategories(gridCollection);
 
     // instantiate view
     var gridSorterView = new App.GridSorterItemView({
@@ -385,9 +414,10 @@ DemoApp = (function(Backbone, Marionette) {
 
     App.vent.on('gridSorter:category:selected', function(category) {
 
-      var filteredCollection = gridCollection.filter(App.items, category);
+        var originalCollection = new App.GridCollection(App.itemsArray);
+        var filteredCollection = gridCollection.filter(originalCollection, category);
 
-      gridCollection.reset(filteredCollection);
+        gridCollection.reset(filteredCollection);
 
     });
 
