@@ -1,5 +1,5 @@
 
-Demo.itemsArray = [
+App.Data = [
   {
     "id": 1,
     "name": "Item1 Name",

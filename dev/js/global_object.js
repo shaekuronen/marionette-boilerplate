@@ -1,3 +1,3 @@
 
 // declare global app variable
-window.Demo = window.Demo || {};
+window.App = window.App || {};
