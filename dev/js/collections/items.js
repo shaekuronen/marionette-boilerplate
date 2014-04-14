@@ -46,4 +46,8 @@ App.ItemsCollection = Backbone.Collection.extend({
 
 });
 
-App.gridCollection = new App.ItemsCollection(App.Data);
+// both grid and sorter_grid modules reference itemsCollection, so make instance here to have one global version (vs instantiating in both the module definitions, which doesn't seem super dry)
+App.itemsCollection = new App.ItemsCollection(App.Data);
+
+// this collection is used for filtering, as itemsCollection will be, well, filtered
+App.originalCollection = new App.ItemsCollection(App.Data);
