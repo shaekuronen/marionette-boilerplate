@@ -45,3 +45,5 @@ App.ItemsCollection = Backbone.Collection.extend({
   }
 
 });
+
+App.gridCollection = new App.ItemsCollection(App.Data);
