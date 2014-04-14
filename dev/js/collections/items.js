@@ -50,4 +50,4 @@ App.ItemsCollection = Backbone.Collection.extend({
 App.itemsCollection = new App.ItemsCollection(App.Data);
 
 // this collection is used for filtering, as itemsCollection will be, well, filtered
-App.originalCollection = new App.ItemsCollection(App.Data);
+App.originalCollection = App.itemsCollection.clone();
