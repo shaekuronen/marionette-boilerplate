@@ -10,5 +10,3 @@ App.Router = Marionette.AppRouter.extend({
   }
 
 });
-
-

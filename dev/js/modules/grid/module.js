@@ -13,10 +13,13 @@ App.module("Grid", function(Grid, App, Backbone, Marionette, $, _) {
 
   App.vent.on('gridSorter:category:selected', function(category) {
 
-      var originalCollection = new App.ItemsCollection(App.Data);
-      var filteredCollection = gridCollection.filter(originalCollection, category);
+    var originalCollection = new App.ItemsCollection(App.Data);
+    var filteredCollection = gridCollection.filter(originalCollection, category);
 
-      gridCollection.reset(filteredCollection);
+    gridCollection.reset(filteredCollection);
+
+    // update the URL
+    App.router.navigate('category/' + category);
 
   });
 

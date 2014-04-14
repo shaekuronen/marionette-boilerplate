@@ -3,11 +3,10 @@ App.RouteController = Marionette.Controller.extend({
 
   showGrid: function(id) {
 
-    console.log('the id is ' + id);
+    var _category = id || 'all';
 
-    var _id = id || 'all';
-
-    console.log('showGrid executed with id ' + _id);
+    // notify controller that select element option was selected
+    App.vent.trigger('gridSorter:category:selected', _category);
 
   }
 

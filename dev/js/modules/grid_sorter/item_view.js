@@ -3,14 +3,9 @@ App.GridSorterItemView = Marionette.ItemView.extend({
 
   tagName: 'select',
   id: 'grid-sorter',
-  attributes: {
-    'name': 'grid-sorter'
-  },
   template: '#sorter-item-template',
 
   initialize: function() {
-
-    var _this = this;
 
     // per this discussion + research looks like have to go into the dom to get select > option:selected event
     // http://stackoverflow.com/questions/16350211/backbone-js-html-select-radio-change-event-is-not-firing-but-click-event-is
@@ -26,9 +21,6 @@ App.GridSorterItemView = Marionette.ItemView.extend({
         App.vent.trigger('gridSorter:category:selected', selectedCategory);
 
       });
-
-      // to be consistent, triggering this in the dom
-      $('#grid-sorter').find('option[value="all"]').prop('selected', true);
 
     });
 
