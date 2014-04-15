@@ -4,7 +4,7 @@ App.RouteController = Marionette.Controller.extend({
   categoryRoute: function(id) {
 
     var _category = 'all',
-        _categories = _.values(App.uniqueCategoriesObject);
+        _categories = App.uniqueCategoriesObject.categories;
 
     // if the category exists in the categories array
     if (_.indexOf(_categories, id) >= 0) {
