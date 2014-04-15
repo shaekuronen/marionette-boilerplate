@@ -23,8 +23,36 @@ module.exports = function(grunt) {
         livereload: true,
         // https://github.com/gruntjs/grunt-contrib-connect/issues/66
         middleware: function(connect, options) {
-          grunt.log.debug('connect is ' + JSON.stringify(connect));
+          console.log('console.log connect is ' + Object.keys(connect));
           return [function(req, res) {
+            console.log('console.log req is ' + Object.keys(req));
+            console.log('req attribute is ' + req.directory);
+
+            // attempt to open the request path
+            require('fs').openSync(req.url, 'r', function(err, fd) {
+
+              if (typeof err !== 'undefined') {
+                console.log('err is ' + err);
+              } else if (typeof fd !== 'undefined') {
+                console.log('fd is ' + Object.keys(fd));
+              } else {
+                console.log('connect middleware error');
+              }
+
+            });
+
+            // if the request is for a file, get the file
+            if (true) {
+
+
+            // if the request is not for a file, redirect to index.html
+            } else {
+
+
+
+            }
+
+
             require('fs').createReadStream('dev/index.html').pipe(res);
           }]
         }
