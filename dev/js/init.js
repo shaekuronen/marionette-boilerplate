@@ -15,6 +15,11 @@ App.on("initialize:after", function() {
   App.router = new App.Router();
 
   // start Backbone history
-  Backbone.history.start({pushState: true});
+  Backbone.history.start({
+    pushState: true,
+    // http://joefleming.net/posts/how-i-use-backbone-router/
+    // force full page refreshes if browser does not support pushState
+    hashChange: Modernizr.history ? true : false
+  });
 
 });
