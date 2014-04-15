@@ -16,10 +16,12 @@ App.on("initialize:after", function() {
 
   // start Backbone history
   Backbone.history.start({
-    pushState: true,
+    pushState: true
+    // ,
     // http://joefleming.net/posts/how-i-use-backbone-router/
     // force full page refreshes if browser does not support pushState
-    hashChange: Modernizr.history ? true : false
+    // hashChange: Modernizr.history ? true : false
+    // hashChange: true
   });
 
 });
