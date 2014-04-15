@@ -10,68 +10,48 @@
 
 module.exports = function(grunt) {
 
+  var rewrite = require('connect-modrewrite');
+
   // Project configuration.
   grunt.initConfig({
 
-  // start a node server
-  connect: {
-    preview: {
-      options: {
-        port: 9000,
-        keepalive: true,
-        base: './dev',
-        livereload: true,
-        // https://github.com/gruntjs/grunt-contrib-connect/issues/66
-        middleware: function(connect, options) {
-          console.log('console.log connect is ' + Object.keys(connect));
-          return [function(req, res) {
-            console.log('console.log req is ' + Object.keys(req));
-            console.log('req attribute is ' + req.directory);
+    // start a node server
+    connect: {
+      preview: {
+        options: {
+          port: 9000,
+          livereload: 35729,
+          keepalive: true,
+          base: './dev',
+          hostname: 'localhost',
 
-            // attempt to open the request path
-            require('fs').openSync(req.url, 'r', function(err, fd) {
+          // http://danburzo.ro/grunt/chapters/server/
+          middleware: function(connect, options) {
 
-              if (typeof err !== 'undefined') {
-                console.log('err is ' + err);
-              } else if (typeof fd !== 'undefined') {
-                console.log('fd is ' + Object.keys(fd));
-              } else {
-                console.log('connect middleware error');
-              }
+            var middleware = [];
 
+            // 1. mod-rewrite behavior
+            var rules = [
+                '!\\.html|\\.js|\\.css|\\.svg|\\.jp(e?)g|\\.png|\\.gif$ /index.html'
+            ];
+            middleware.push(rewrite(rules));
+
+            // 2. original middleware behavior
+            var base = options.base;
+            if (!Array.isArray(base)) {
+                base = [base];
+            }
+            base.forEach(function(path) {
+                middleware.push(connect.static(path));
             });
 
-            // if the request is for a file, get the file
-            if (true) {
+            return middleware;
 
+          }
 
-            // if the request is not for a file, redirect to index.html
-            } else {
-
-
-
-            }
-
-
-            require('fs').createReadStream('dev/index.html').pipe(res);
-          }]
         }
       }
     },
-    optimize: {
-      options: {
-        port: 9001,
-        keepalive: true,
-        base: './production',
-        // https://github.com/gruntjs/grunt-contrib-connect/issues/66
-        middleware: function(connect, options) {
-          return [function(req, res) {
-            require('fs').createReadStream('index.html').pipe(res);
-          }]
-        }
-      }
-    }
-  },
 
     watch: {
       dev: {
@@ -92,7 +72,7 @@ module.exports = function(grunt) {
       options: {
         jshintrc: '.jshintrc',
       }
-    },
+    }
 
   });
 

@@ -1,10 +1,12 @@
 
 App.module("GridSorter", function(GridSorter, App, Backbone, Marionette, $, _) {
 
-  // create unique categories instance
-  var uniqueCategoriesObject = App.itemsCollection.getUniqueCategories();
+  // // create unique categories instance
+  // var uniqueCategoriesObject = App.itemsCollection.getUniqueCategories();
 
-  var gridSorterModel = new App.GridSorterModel(uniqueCategoriesObject);
+  // var gridSorterModel = new App.GridSorterModel(uniqueCategoriesObject);
+
+  var gridSorterModel = new App.GridSorterModel(App.uniqueCategoriesObject);
 
   // instantiate view
   var gridSorterView = new App.GridSorterItemView({

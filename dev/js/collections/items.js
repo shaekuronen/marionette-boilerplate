@@ -51,3 +51,6 @@ App.itemsCollection = new App.ItemsCollection(App.Data);
 
 // this collection is used for filtering, as itemsCollection will be, well, filtered
 App.originalCollection = App.itemsCollection.clone();
+
+// create unique categories instance
+App.uniqueCategoriesObject = App.itemsCollection.getUniqueCategories();
