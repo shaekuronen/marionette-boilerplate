@@ -17,7 +17,7 @@ App.module("GridSorter", function(GridSorter, App, Backbone, Marionette, $, _) {
   App.vent.on('gridSorter:category:selected', function(category) {
 
     // get option with attribute value equal to category and set select property to true
-    $('#grid-sorter option[value="' + category + '"').prop('selected', true);
+    $('#grid-sorter option[value="' + category + '"]').prop('selected', true);
 
   });
 
