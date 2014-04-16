@@ -98,7 +98,8 @@ module.exports = function(grunt) {
     // execute the task
     grunt.task.run(
       'handlebars',
-      'connect:preview'
+      'connect:preview',
+      'watch'
     );
 
   });
