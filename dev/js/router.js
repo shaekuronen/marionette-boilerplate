@@ -4,7 +4,8 @@ App.Router = Marionette.AppRouter.extend({
   controller: new App.RouteController,
 
   appRoutes: {
-    'category/:id': 'categoryRoute'
+    'category/:id': 'categoryRoute',
+    'item/:id': 'itemRoute'
   }
 
 });

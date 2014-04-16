@@ -14,6 +14,12 @@ App.RouteController = Marionette.Controller.extend({
     // notify controller that select element option was selected
     App.vent.trigger('gridSorter:category:selected', _category);
 
+  },
+
+  itemRoute: function(id) {
+
+    console.log('itemRoute executed with id ' + id);
+
   }
 
 });
