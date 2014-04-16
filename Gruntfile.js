@@ -15,6 +15,17 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
 
+    handlebars: {
+      compile: {
+        options: {
+          namespace: "JST"
+        },
+        files: {
+          "dev/templates/compiled.js": "dev/templates/**/*.hbs"
+        }
+      }
+    },
+
     // start a node server
     connect: {
       preview: {
@@ -80,11 +91,13 @@ module.exports = function(grunt) {
   grunt.registerTask('preview', [], function () {
 
     // load plugins for the task
+    grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // execute the task
     grunt.task.run(
+      'handlebars',
       'connect:preview'
     );
 

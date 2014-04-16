@@ -3,7 +3,7 @@ App.GridSorterItemView = Marionette.ItemView.extend({
 
   tagName: 'select',
   id: 'grid-sorter',
-  template: '#sorter-item-template',
+  template: JST['dev/templates/sorter_item.hbs'],
 
   initialize: function() {
 

@@ -1,5 +1,5 @@
 
 App.GridItemView = Marionette.ItemView.extend({
   tagName: 'li',
-  template: '#grid-item'
+  template: JST['dev/templates/grid_item.hbs']
 });
