@@ -1,11 +1,6 @@
 
 App.module("GridSorter", function(GridSorter, App, Backbone, Marionette, $, _) {
 
-  // // create unique categories instance
-  // var uniqueCategoriesObject = App.itemsCollection.getUniqueCategories();
-
-  // var gridSorterModel = new App.GridSorterModel(uniqueCategoriesObject);
-
   var gridSorterModel = new App.GridSorterModel(App.uniqueCategoriesObject);
 
   // instantiate view
@@ -20,6 +15,12 @@ App.module("GridSorter", function(GridSorter, App, Backbone, Marionette, $, _) {
 
     // get option with attribute value equal to category and set select property to true
     $('#grid-sorter option[value="' + category + '"]').prop('selected', true);
+
+  });
+
+  App.vent.on('grid:item:selected', function(modelId) {
+
+    $('#grid-sorter option[value=""]').prop('selected', true);
 
   });
 

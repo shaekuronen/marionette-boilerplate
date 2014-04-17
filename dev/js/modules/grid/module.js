@@ -17,6 +17,9 @@ App.module("Grid", function(Grid, App, Backbone, Marionette, $, _) {
     // reset itemsCollection
     App.itemsCollection.reset(filteredCollection);
 
+    // render grid
+    App.gridRegion.show(gridCollectionView);
+
     // update the URL
     App.router.navigate('category/' + category);
 
@@ -25,7 +28,14 @@ App.module("Grid", function(Grid, App, Backbone, Marionette, $, _) {
   // when an item in the grid is clicked
   App.vent.on('grid:item:selected', function(modelId) {
 
-    gridCollectionView.close();
+    // gridCollectionView.close();
+    App.gridRegion.close();
+
+  });
+
+  App.vent.on('item:route', function(url_safe_title) {
+
+    App.gridRegion.close();
 
   });
 

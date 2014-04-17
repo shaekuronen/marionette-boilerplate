@@ -16,9 +16,11 @@ App.RouteController = Marionette.Controller.extend({
 
   },
 
-  itemRoute: function(id) {
+  itemRoute: function(url_safe_title) {
 
-    console.log('itemRoute executed with id ' + id);
+    console.log('itemRoute executed with url_safe_title ' + url_safe_title);
+
+    App.vent.trigger('item:route', url_safe_title);
 
   }
 
