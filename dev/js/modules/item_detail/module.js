@@ -1,20 +1,19 @@
 
 App.module("ItemDetail", function(ItemDetail, App, Backbone, Marionette, $, _) {
 
-  // create an instance of item detail model
-  var itemDetailModel = new App.ItemDetailModel();
+  App.vent.on('grid:item:selected', function(modelId) {
 
-  // instantiate view
-  var itemDetailView = new App.ItemDetailView({
-    model: itemDetailModel
-  });
+    // console.log('itemDetailModel is ' + Object.keys(itemDetailModel));
+    // console.log('itemDetailModel.attributes is ' + Object.keys(itemDetailModel.attributes));
+    // console.log('itemDetailModel attribute title is ' + itemDetailModel.get('title'));
 
-  // render item detail
-  App.itemDetailRegion.show(itemDetailView);
+    // instantiate view
+    var itemDetailItemView = new App.ItemDetailItemView({
+      model: App.itemsCollection.get(modelId)
+    });
 
-  App.vent.on('grid:item:selected', function(item) {
-
-
+    // render item detail
+    App.itemDetailRegion.show(itemDetailItemView);
 
   });
 

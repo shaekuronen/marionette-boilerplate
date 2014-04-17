@@ -3,7 +3,8 @@ App = new Marionette.Application();
 
 App.addRegions({
   sorterRegion: '#grid-sorter-region',
-  gridRegion: '#grid-region'
+  gridRegion: '#grid-region',
+  itemDetailRegion: '#item-detail-region'
 });
 
 // add an event manager
