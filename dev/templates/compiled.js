@@ -52,7 +52,7 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "\n";
+  buffer += "\n<option value=\"\">Categories</option>\n";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.categories), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n";
