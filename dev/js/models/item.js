@@ -18,6 +18,9 @@ App.ItemModel = Backbone.Model.extend({
     // add the url safe title to the model
     this.set('url_safe_title', url_safe_title);
 
+    // model defaults to selected
+    this.set('selected', true);
+
   }
 
 });
