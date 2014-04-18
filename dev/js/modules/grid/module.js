@@ -2,7 +2,7 @@
 App.module("Grid", function(Grid, App, Backbone, Marionette, $, _) {
 
   // create an instance of GridCollectionView
-  var gridCollectionView = new App.ItemsCollectionView({
+  var gridCollectionView = new App.GridCollectionView({
     collection: App.itemsCollection
   });
 

@@ -1,5 +1,5 @@
 
-App.ItemsCollectionView = Marionette.CollectionView.extend({
+App.GridCollectionView = Marionette.CollectionView.extend({
 
   tagName: 'ul',
 
