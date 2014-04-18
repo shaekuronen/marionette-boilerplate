@@ -24,6 +24,20 @@ App.GridSorterItemView = Marionette.ItemView.extend({
 
     });
 
+    // this view listens to changes on the model
+    this.listenTo(this.model, 'change', this.render);
+
+  },
+
+  // https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.itemview.md#render--onrender-event
+  onRender: function() {
+
+    // get the selected category
+    var category = this.model.get('selected_category');
+
+    // set the selected category in the select element
+    $('#grid-sorter option[value="' + category + '"]').prop('selected', true);
+
   }
 
 });

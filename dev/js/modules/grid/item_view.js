@@ -12,6 +12,7 @@ App.GridItemView = Marionette.ItemView.extend({
   itemClicked: function() {
 
     App.vent.trigger('grid:item:selected', this.model.get('id'));
+
   }
 
 });

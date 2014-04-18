@@ -13,14 +13,16 @@ App.module("GridSorter", function(GridSorter, App, Backbone, Marionette, $, _) {
 
   App.vent.on('gridSorter:category:selected', function(category) {
 
-    // get option with attribute value equal to category and set select property to true
-    $('#grid-sorter option[value="' + category + '"]').prop('selected', true);
+    // update the model's selected_category property
+    gridSorterModel.setSelectedCategory(category);
 
   });
 
   App.vent.on('grid:item:selected', function(modelId) {
 
-    $('#grid-sorter option[value=""]').prop('selected', true);
+    // update the model's selected_category property to empty string
+    // this resets the sorter to default state (in this case, 'Categories')
+    gridSorterModel.setSelectedCategory('');
 
   });
 
