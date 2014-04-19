@@ -1,6 +1,7 @@
 
 App.module("Grid", function(Grid, App, Backbone, Marionette, $, _) {
 
+  // create another instance of App.ItemsCollection to allow filtering and reseting while preserving an apriori version (App.itemsCollection) to filter against
   var gridCollection = new App.ItemsCollection(App.Data);
 
   // create an instance of GridCollectionView
@@ -13,7 +14,7 @@ App.module("Grid", function(Grid, App, Backbone, Marionette, $, _) {
 
   App.vent.on('gridSorter:category:selected', function(category) {
 
-    // update collection models to selected:true if they contain the category argument
+    // update collection models to selected:true if they contain the category
     App.itemsCollection.setSelectedCategory(category);
 
     // update the URL
